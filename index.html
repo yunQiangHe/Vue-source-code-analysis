@@ -9,10 +9,21 @@
 </head>
 
 <body>
+    <div id="app">
+        {{ msg }}
+    </div>
+
     <script src="./js/observer.js"></script>
     <script src="./js/watcher.js"></script>
     <script src="./js/compile.js"></script>
     <script src="./js/mvvm.js"></script>
+    <script>
+        new MVVM({
+            el:"#app",
+            data:{
+                msg:"Hello vue"
+            }
+        });
+    </script>
 </body>
-
 </html>
