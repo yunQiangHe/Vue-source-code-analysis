@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue源码分析</title>
+</head>
+
+<body>
+    <ul id="fragment_test">
+        <li>1. [].slice.call(lis) 将伪数组转换成真数组</li>
+        <li>2. node.nodeType 得到节点类型</li>
+        <li>3. Object.defineProperty(obj, prop, descriptor) 给对象添加属性（指定描述符）</Object></li>
+        <li>4. Object.keys(obj) 得到对象自身可枚举属性组成的数组 </li>
+        <li>5. obj.hasOwnProperty(prop) 判断prop是否是obj自身的属性</li>
+        <li>6. DocumentFragment 文档碎片（高效批量更新多个节点）</li>
+    </ul>
+</body>
+
+</html>
+<script>
+    /*
+     *1. [].slice.call(lis) 将伪数组转换成真数组
+     */
+    const lis = document.getElementsByTagName("li");
+    console.log(lis);
+    // es6   Array.from() 方法从一个类似数组或可迭代对象中创建一个新的数组实例
+    console.log(Array.from(lis)); //Array
+    console.log(Array.from("hyq")); //Array ["h", "y", "q"]
+    // es5 
+    const lisNew = Array.prototype.slice.call(lis);
+    console.log(lisNew);
+
+    /*
+     *2. node.nodeType 得到节点类型 12中 1元素节点 2属性节点 3文本节点 。。。
+     */
+    console.log(lis[0].nodeType);
+    console.log(lis[0].nodeName);
+
+    /*
+     * 3 Object.defineProperty(obj要在其上定义属性的对象。, propertyName要定义或修改的属性的名称。, {将被定义或修改的属性描述符。}) 
+     * 
+     */
+    const person = {
+        firstName: "A",
+        lastName: "B"
+    }
+    // 需求添加属性 fullName
+    Object.defineProperty(person, "fullName", {
+        // 1.数据描述符
+        //configurable: false,  //是否能重新定义
+        //enumerable:false, //是否可枚举
+        //value:'',
+        //writable:false ,//s是否可以修改属性值
+        // 2.存取描述符是由getter-setter函数对描述的属性
+        get() { //回调函数  默认undefined 根据其他相关的属性动态的计算当前属性值
+            return this.firstName + "-" + this.lastName;
+        },
+        set(value) { //回调函数  默认undefined 监视当前属性值的变化  更新其他相关的属性值
+            const name = value.split("-");
+            this.firstName = name[0];
+            this.lastName = name[1];
+        }
+    });
+    console.log(person.fullName);
+    person.firstName = 'he';
+    person.lastName ="yunqiang";
+    console.log(person.fullName);
+    person.fullName="zhang-min";
+    console.log(person.firstName,person.lastName);
+</script>
