@@ -9,13 +9,18 @@
 </head>
 
 <body>
-    <ul id="fragment_test">
+    <ul>
         <li>1. [].slice.call(lis) 将伪数组转换成真数组</li>
         <li>2. node.nodeType 得到节点类型</li>
         <li>3. Object.defineProperty(obj, prop, descriptor) 给对象添加属性（指定描述符）</Object></li>
         <li>4. Object.keys(obj) 得到对象自身可枚举属性组成的数组 </li>
         <li>5. obj.hasOwnProperty(prop) 判断prop是否是obj自身的属性</li>
         <li>6. DocumentFragment 文档碎片（高效批量更新多个节点）</li>
+    </ul>
+    <ul id="fragment_test">
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
     </ul>
 </body>
 
@@ -66,8 +71,47 @@
     });
     console.log(person.fullName);
     person.firstName = 'he';
-    person.lastName ="yunqiang";
+    person.lastName = "yunqiang";
     console.log(person.fullName);
-    person.fullName="zhang-min";
-    console.log(person.firstName,person.lastName);
+    person.fullName = "zhang-min";
+    console.log(person.firstName, person.lastName);
+
+    /*
+     *  4. Object.keys(obj)
+     *方法会返回一个由一个给定对象的自身可枚举属性组成的数组，数组中属性名的排列顺序和使用 for...in 循环遍历该对象时返回的顺序一致 
+     */
+    console.log(Object.keys(person)); //["firstName", "lastName"]
+
+    /*
+     *  5.obj.hasOwnProperty(prop)
+     * 要检测的属性  字符串 名称或者 Symbol。
+     */
+
+    const hasfullnameAtrr =  person.hasOwnProperty("fullName");
+    console.log(hasfullnameAtrr);
+
+    /*
+     *  6. DocumentFragment 文档碎片
+     * 文档片段接口，表示一个没有父级文件的最小文档对象。
+     * 最大的区别是因为 DocumentFragment 不是真实DOM树的一部分，它的变化不会触发 DOM 树的（重新渲染) ，且不会导致性能等问题。 
+     * 内存
+     */
+
+     const ul =document.getElementById("fragment_test");
+    //  1. 创建fragment
+    const fragment = document.createDocumentFragment();
+    // 2.取出ul中所有的子节点保存到fragment
+    let child;
+    while(child = ul.firstChild){ //一个节点只能有一个父亲
+        fragment.appendChild(child); //现将child从ul中移除添加到fragment子节点
+    }
+    // 3.更新fragment中的文本内容
+    Array.prototype.slice.call(fragment.childNodes).forEach(node => {
+        if(node.nodeType == 1){
+            node.innerText ="跟新的文本内容"
+        } 
+    });
+
+    // 4.将fragment插入
+    ul.appendChild(fragment)
 </script>
